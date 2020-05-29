@@ -61,7 +61,8 @@ func MapInit() {
 				log.Println("地图包路径：" + packPath)
 				doc := etree.NewDocument()
 				if err := doc.ReadFromFile(packPath + ".idx"); err != nil {
-					log.Panic(err)
+					log.Println("地图包路径不存在！：" + packPath + ".idx")
+					return
 				}
 				root := doc.SelectElement("map")
 				zlist := root.ChildElements()
