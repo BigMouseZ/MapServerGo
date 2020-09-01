@@ -1,24 +1,25 @@
 package main
 
 import (
-	"MapServerGo/golog"
-	"MapServerGo/mapinit"
 	"github.com/gin-gonic/gin"
 	"io"
 	"log"
 	"os"
 	"time"
+
+	"MapServerGo/golog"
+	"MapServerGo/mapinit"
 )
 
 func main() {
-	//日志配置
+	// 日志配置
 	golog.Func_log2fileAndStdout()
-	//初始化地图
+	// 初始化地图
 	mapinit.MapInit()
-	//Default返回一个默认的路由引擎
+	// Default返回一个默认的路由引擎
 	r := gin.Default()
 	r.GET("/map.ashx", MapHandle)
-	//第一个参数是api，第二个是文件夹路径
+	// 第一个参数是api，第二个是文件夹路径
 	root := "./static"
 	existFile, err := mapinit.PathExists(root)
 	if existFile {
@@ -46,7 +47,7 @@ func MapHandle(c *gin.Context) {
 	if len(mapType) <= 0 {
 		mapType = "mapList"
 	}
-	//读取地图包瓦片
+	// 读取地图包瓦片
 	openDBModel := mapinit.Config["openDBModel"]
 	var buffer []byte
 	if openDBModel == "false" {
@@ -72,19 +73,19 @@ func WritePackMap(x, y, z, mapType string) []byte {
 			if err != nil {
 				log.Println("读取文件异常：", err)
 				return nil
-				//log.Fatal(err)
+				// log.Fatal(err)
 			}
 			_, err = f.Seek(mapTile.Offset, io.SeekStart)
 			if err != nil {
 				log.Println("读取文件异常：", err)
 				return nil
-				//log.Fatal(err)
+				// log.Fatal(err)
 			}
 			_, err = f.Read(buffer)
 			if err != nil {
 				log.Println("读取文件异常：", err)
 				return nil
-				//log.Fatal(err)
+				// log.Fatal(err)
 			}
 			return buffer
 		}
